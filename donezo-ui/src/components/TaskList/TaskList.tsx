@@ -5,7 +5,7 @@ import { Task } from '../../types/Task';
 
 interface TaskListProps {
   tasks: Task[];
-  onToggle: (id: number, completed: boolean) => void;
+  onToggle: (id: number) => void;
   onDelete: (id: number) => void;
 }
 
@@ -22,7 +22,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onToggle, onDelete }) => (
       >
         <Checkbox
           checked={task.completed}
-          onChange={() => onToggle(task.id, !task.completed)}
+          onChange={() => onToggle(task.id)}
         />
         <ListItemText
           primary={task.name}

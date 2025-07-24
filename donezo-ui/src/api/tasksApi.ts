@@ -13,8 +13,8 @@ export const createTask = async (name: string): Promise<Task> => {
   return res.data;
 };
 
-export const toggleTask = async (id: number, completed: boolean): Promise<Task> => {
-  const res = await axios.patch<Task>(`${API_URL}/${id}`, { completed });
+export const toggleTask = async (id: number): Promise<Task> => {
+  const res = await axios.patch<Task>(`${API_URL}/${id}/toggle`);
   return res.data;
 };
 

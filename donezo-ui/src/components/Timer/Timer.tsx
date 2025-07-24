@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Button, Paper, Stack, Typography } from '@mui/material';
 
 const INITIAL_TIME = 25 * 60; // 25 minutes in seconds
 
@@ -40,14 +40,14 @@ const Timer: React.FC = () => {
   const secs = String(seconds % 60).padStart(2, '0');
 
   return (
-    <Box textAlign="center" mt={4}>
-      <Typography variant="h2">{minutes}:{secs}</Typography>
-      <Box mt={2} display="flex" justifyContent="center" gap={2}>
-        <Button variant="contained" onClick={start} disabled={running}>Start</Button>
-        <Button variant="outlined" onClick={pause} disabled={!running}>Pause</Button>
-        <Button variant="text" onClick={reset}>Reset</Button>
-      </Box>
-    </Box>
+    <Paper sx={{ p: 3, mt: 3, textAlign: 'center', backgroundColor: 'background.paper' }}>
+      <Typography variant="h2" color="textPrimary">{minutes}:{secs}</Typography>
+      <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 2 }}>
+        <Button variant="contained" color="error" onClick={start} disabled={running}>Start</Button>
+        <Button variant="outlined" color="error" onClick={pause} disabled={!running}>Pause</Button>
+        <Button variant="outlined" color="error" onClick={reset}>Reset</Button>
+      </Stack>
+    </Paper>
   );
 };
 

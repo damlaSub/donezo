@@ -16,18 +16,49 @@ const TaskInput: React.FC<TaskInputProps> = ({ onAdd }) => {
   };
 
   return (
-    <Box display="flex" gap={2} mb={2}>
-      <TextField
-        label="New Task"
-        value={value}
-        onChange={e => setValue(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && handleAdd()}
-        fullWidth
-      />
-      <Button variant="contained" onClick={handleAdd}>
-        Add
-      </Button>
-    </Box>
+    <Box
+  display="flex"
+  gap={2}
+  mb={3}
+  p={2}
+  sx={{
+    backgroundColor: 'background.paper',
+    boxShadow: 2,
+    borderRadius: 2,
+    alignItems: 'center',
+  }}
+>
+  <TextField
+    label="New Task"
+    value={value}
+    onChange={e => setValue(e.target.value)}
+    onKeyDown={e => e.key === 'Enter' && handleAdd()}
+    fullWidth
+    variant="outlined"
+    sx={{
+      '& .MuiInputBase-root': {
+        borderRadius: 2,
+      },
+    }}
+  />
+  <Button
+    variant="contained"
+    onClick={handleAdd}
+    size="large"
+    sx={{
+      borderRadius: 2,
+      textTransform: 'none',
+      px: 3,
+      backgroundColor: 'primary.main',
+      '&:hover': {
+        backgroundColor: 'primary.dark',
+      },
+    }}
+  >
+    Add
+  </Button>
+</Box>
+
   );
 };
 

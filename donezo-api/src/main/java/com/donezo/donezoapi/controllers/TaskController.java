@@ -29,7 +29,7 @@ public class TaskController {
          service.createTask(request.name());
     }
 
-    @PutMapping("/{id}/toggle")
+    @PatchMapping("/{id}/toggle")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void toggle(@PathVariable Long id) {
          service.toggleTask(id);

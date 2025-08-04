@@ -13,6 +13,12 @@ jobs:
       run:
         working-directory: donezo-api
 
+      env:
+        SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
+        SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USER }}
+        SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DONEZO_API_AUTH_SECRET: ${{ secrets.JWT_SECRET }}
+
     steps:
       - uses: actions/checkout@v3
 

@@ -3,8 +3,14 @@ name: Backend CI
 on:
   push:
     branches: [develop]
+    paths:
+      - 'donezo-api/**'
+      - 'donezo/**'
   pull_request:
     branches: [develop]
+    paths:
+      - 'donezo-api/**'
+      - 'donezo/**'
   workflow_dispatch:
 
 jobs:

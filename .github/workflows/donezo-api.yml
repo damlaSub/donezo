@@ -5,6 +5,7 @@ on:
     branches: [develop]
   pull_request:
     branches: [develop]
+  workflow_dispatch:
 
 jobs:
   backend:
@@ -26,7 +27,7 @@ jobs:
           --health-retries 5
 
     env:
-      SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}  # e.g., jdbc:postgresql://localhost:5432/${{ secrets.DB_NAME }}
+      SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
       SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USER }}
       SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DONEZO_API_AUTH_SECRET: ${{ secrets.JWT_SECRET }}
@@ -46,6 +47,14 @@ jobs:
 
       - name: Grant execute permission to Maven Wrapper
         run: chmod +x mvnw
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in {1..10}; do
+            pg_isready -h localhost -p 5432 && break
+            echo "Waiting for Postgres..."
+            sleep 3
+          done
 
       - name: Run tests with Maven
         run: ./mvnw test

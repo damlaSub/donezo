@@ -3,6 +3,7 @@ package com.donezo.donezoapi.controllers;
 import com.donezo.donezoapi.dtos.CreateTaskRequest;
 import com.donezo.donezoapi.dtos.TaskResponse;
 import com.donezo.donezoapi.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void create(@RequestBody CreateTaskRequest request) {
+    public void create(@Valid @RequestBody CreateTaskRequest request) {
          service.createTask(request.name());
     }
 

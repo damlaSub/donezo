@@ -1,8 +1,6 @@
 package com.donezo.donezoapi.service;
 
 import com.donezo.donezoapi.dtos.TaskResponse;
-import com.donezo.donezoapi.entites.Task;
-
 import java.util.List;
 
 public interface TaskService {

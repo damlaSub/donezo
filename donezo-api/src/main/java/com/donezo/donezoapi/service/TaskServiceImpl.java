@@ -20,14 +20,15 @@ public class TaskServiceImpl implements TaskService {
 
         public List<TaskResponse> getAllTasks() {
             return repo.findAll().stream()
-                    .map(task -> new TaskResponse(task.getId(), task.getName(), task.isCompleted(), task.getCreatedAt())).toList();
+                    .map(this::buildTaskResponse).toList();
         }
 
-        public void createTask(String name) {
+        public TaskResponse createTask(String name) {
             Task task = new Task();
             task.setName(name);
             task.setCreatedAt(LocalDateTime.now());
-            repo.save(task);
+            Task saved = repo.save(task);
+            return buildTaskResponse(saved);
         }
 
         public void toggleTask(Long id) {
@@ -38,5 +39,9 @@ public class TaskServiceImpl implements TaskService {
 
         public void deleteTask(Long id) {
             repo.deleteById(id);
+        }
+
+        protected TaskResponse buildTaskResponse(Task task) {
+            return new TaskResponse(task.getId(), task.getName(), task.isCompleted(), task.getCreatedAt());
         }
 }

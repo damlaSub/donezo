@@ -10,7 +10,7 @@ public interface TaskService {
 
     List<TaskResponse> getAllTasks();
 
-    void createTask(String name);
+    TaskResponse createTask(String name);
 
     void toggleTask(Long id);
 

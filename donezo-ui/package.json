@@ -1,6 +1,7 @@
 {
   "name": "donezo-ui",
   "version": "0.1.0",
+  "homepage": "https://damlasub.github.io/donezo/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",

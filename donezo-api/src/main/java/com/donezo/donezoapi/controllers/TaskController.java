@@ -30,9 +30,8 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/toggle")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void toggle(@PathVariable Long id) {
-         service.toggleTask(id);
+    public TaskResponse toggle(@PathVariable Long id) {
+         return service.toggleTask(id);
     }
 
     @DeleteMapping("/{id}")

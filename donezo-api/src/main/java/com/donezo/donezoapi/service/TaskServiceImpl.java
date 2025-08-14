@@ -31,10 +31,11 @@ public class TaskServiceImpl implements TaskService {
             return buildTaskResponse(saved);
         }
 
-        public void toggleTask(Long id) {
+        public TaskResponse toggleTask(Long id) {
             Task task = repo.findById(id).orElseThrow();
             task.setCompleted(!task.isCompleted());
-             repo.save(task);
+             Task saved = repo.save(task);
+             return buildTaskResponse(saved);
         }
 
         public void deleteTask(Long id) {

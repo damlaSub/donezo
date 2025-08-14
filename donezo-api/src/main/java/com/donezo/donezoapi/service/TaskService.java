@@ -10,7 +10,7 @@ public interface TaskService {
 
     TaskResponse createTask(String name);
 
-    void toggleTask(Long id);
+    TaskResponse toggleTask(Long id);
 
     void deleteTask(Long id);
 }

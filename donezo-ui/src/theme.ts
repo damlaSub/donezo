@@ -14,7 +14,7 @@ const theme = createTheme({
       main: '#E53935', // Tomato red for Pomodoro
     },
     background: {
-      default: '#F5F7FA', // Light neutral
+      default: '#fafafa', // Light neutral
       paper: '#FFFFFF',
     },
     text: {

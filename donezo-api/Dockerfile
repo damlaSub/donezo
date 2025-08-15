@@ -1,25 +1,24 @@
-# Use Java 21 base image
-FROM eclipse-temurin:21-jdk
-
-# Set working directory
+# Stage 1 — Build the JAR
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copy Maven wrapper and project files
-COPY mvnw pom.xml ./
-COPY .mvn .mvn
+# Copy only pom.xml first to leverage Docker cache for dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy source code and build the application
 COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Give execute permission to mvnw
-RUN chmod +x mvnw
+# Stage 2 — Run the application
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
 
-# Build the project (skip tests in CI/CD)
-RUN ./mvnw clean package -DskipTests
+# Copy the built JAR from the build stage
+COPY --from=build /app/target/*.jar app.jar
 
-# Copy the built jar
-COPY target/*.jar app.jar
-
-# Expose port 8080
+# Expose application port
 EXPOSE 8080
 
-# Run the app
-ENTRYPOINT ["java","-jar","app.jar"]
+# Run the JAR
+ENTRYPOINT ["java", "-jar", "app.jar"]

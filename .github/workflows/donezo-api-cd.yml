@@ -1,0 +1,39 @@
+name: Backend CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'donezo-api/**'
+      - 'donezo/**'
+  workflow_dispatch:
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: donezo-api
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Show current directory and list files
+        run: |
+          pwd
+          ls -la
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: docker build -t donezo-api .
+
+      - name: Push / Deploy Docker image
+        run: |
+          #will be replaced with Render CLI/API deploy command for auto-deploy
+          echo "Deployment step placeholder - adjust with Render CLI or API"
+

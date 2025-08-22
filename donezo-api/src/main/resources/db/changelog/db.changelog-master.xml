@@ -5,10 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <include file="db/changelog/changelog-add-created-at.xml"/>
+    <!-- Create schema if it doesn't exist -->
+    <changeSet id="0" author="damlaSub">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS donezo_schema;
+        </sql>
+    </changeSet>
 
+    <!-- Create tasks table in the schema -->
     <changeSet id="1" author="damlaSub">
-        <createTable tableName="tasks">
+        <createTable tableName="tasks" schemaName="donezo_schema">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -20,5 +26,8 @@
             </column>
         </createTable>
     </changeSet>
+
+    <!-- Include other changes -->
+    <include file="db/changelog/changelog-add-created-at.xml"/>
 
 </databaseChangeLog>

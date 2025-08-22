@@ -31,18 +31,11 @@ const TasksPage: React.FC = () => {
 
   const handleAddTask = async (name: string) => {
     try {
-      console.log('Adding task:', name);
-      console.log('Current tasks before adding:', tasks);
-      
       const newTask = await createTask(name);
-      console.log('API response after createTask:', newTask);
-      console.log('New task name:', newTask.name);
-      console.log('New task object:', newTask);
-      
+           
       // Add the new task to local state
       setTasks(prevTasks => {
         const updatedTasks = [...prevTasks, newTask];
-        console.log('Updated tasks array:', updatedTasks);
         return updatedTasks;
       });
       

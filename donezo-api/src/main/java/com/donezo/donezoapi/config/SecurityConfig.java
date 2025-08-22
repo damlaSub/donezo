@@ -17,21 +17,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        if (securityEnabled) {
-            // Prod: enable HTTP Basic auth
-            http
-                    .csrf(csrf -> csrf.disable())
-                    .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                    .httpBasic(Customizer.withDefaults())
-                    .cors(Customizer.withDefaults());
-        } else {
-            // Dev: no auth
-            http
-                    .csrf(csrf -> csrf.disable())
-                    .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                    .cors(Customizer.withDefaults());
-        }
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .cors(Customizer.withDefaults());
 
         return http.build();
     }

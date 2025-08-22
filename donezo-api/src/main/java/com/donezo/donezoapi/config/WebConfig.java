@@ -18,6 +18,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
             registry.addMapping("/**")
                     .allowedOrigins(allowedOrigins)
                     .allowedMethods("POST", "GET", "PUT",
-                            "PATCH", "DELETE");
+                            "PATCH", "DELETE", "OPTIONS")
+                    .allowedHeaders("*")
+                    .allowCredentials(true);
         }
 }

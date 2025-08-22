@@ -29,12 +29,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to Render (using API key secret)
+      - name: Install Render CLI
+        run: npm install -g render-cli
+
+      - name: Log in to Render
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        run: |
-          curl -sSL https://cli.render.com/install | bash
-          render login --api-key $RENDER_API_KEY
+        run: render login --api-key $RENDER_API_KEY
 
       - name: Build Docker image
         run: docker build -t donezo-api .
@@ -43,5 +44,10 @@ jobs:
         env:
           PROD_DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
           DONEZO_API_AUTH_SECRET: ${{ secrets.JWT_SECRET }}
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          PROD_BASIC_AUTH_USER: ${{ secrets.PROD_BASIC_AUTH_USER }}
+          PROD_BASIC_AUTH_PASSWORD: ${{ secrets.PROD_BASIC_AUTH_PASSWORD }}
         run: |
-          render services deploy srv-d2fjp86r433s73bf6d00 --image donezo-api
+          render services deploy $RENDER_SERVICE_ID --image donezo-api
+

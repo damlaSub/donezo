@@ -25,18 +25,18 @@ jobs:
         with:
           node-version: 18
           cache: npm
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: donezo-ui/package-lock.json
 
       - name: Clean install dependencies
         run: npm ci
 
       - name: Build project with API URL
         env:
-          REACT_APP_API_URL: https://donezo-api-qzek.onrender.com
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build
+          publish_dir: ./donezo-ui/build

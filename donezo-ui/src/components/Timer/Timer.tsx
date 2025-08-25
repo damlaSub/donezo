@@ -8,7 +8,7 @@ interface TimerProps {
 }
 
 const Timer: React.FC<TimerProps> = ({ mode }) => {
-  const getInitialTime = () => {
+  const getInitialTime = React.useCallback(() => {
     switch (mode) {
       case 'pomodoro':
         return 25 * 60; // 25 minutes
@@ -19,7 +19,7 @@ const Timer: React.FC<TimerProps> = ({ mode }) => {
       default:
         return 25 * 60;
     }
-  };
+  }, [mode]);
 
   const getButtonColor = () => {
     return mode === 'pomodoro' ? 'error' : 'primary';
@@ -31,12 +31,11 @@ const Timer: React.FC<TimerProps> = ({ mode }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const buttonAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Reset timer when mode changes
   React.useEffect(() => {
     setSeconds(getInitialTime());
     setRunning(false);
     if (intervalRef.current) clearInterval(intervalRef.current);
-  }, [mode]);
+  }, [getInitialTime]);
 
   const stopAllAudio = () => {
     if (audioRef.current) {
@@ -62,7 +61,7 @@ const Timer: React.FC<TimerProps> = ({ mode }) => {
   const playAlarmSound = () => {
     stopAllAudio();
     audioRef.current = new Audio(alarmSound);
-    audioRef.current.play();
+    audioRef.current.play().catch(() => {});
   };
 
   const playButtonSound = () => {
@@ -101,7 +100,7 @@ const Timer: React.FC<TimerProps> = ({ mode }) => {
         console.error('Error playing button sound:', error);
         // fallback to regular audio if trimming fails
         buttonAudioRef.current = new Audio(buttonSound);
-        buttonAudioRef.current.play();
+        (buttonAudioRef.current as HTMLAudioElement).play().catch(() => {});
       });
   };
 

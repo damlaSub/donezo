@@ -1,10 +1,12 @@
 {
   "files": {
-    "main.js": "/donezo/static/js/main.f2623133.js",
+    "main.js": "/donezo/static/js/main.0ddd2367.js",
+    "static/media/buttonSound.mp3": "/donezo/static/media/buttonSound.deb07705bcc3cf1714a6.mp3",
+    "static/media/alarm.mp3": "/donezo/static/media/alarm.ff940147a3d8f19a7eb5.mp3",
     "index.html": "/donezo/index.html",
-    "main.f2623133.js.map": "/donezo/static/js/main.f2623133.js.map"
+    "main.0ddd2367.js.map": "/donezo/static/js/main.0ddd2367.js.map"
   },
   "entrypoints": [
-    "static/js/main.f2623133.js"
+    "static/js/main.0ddd2367.js"
   ]
 }

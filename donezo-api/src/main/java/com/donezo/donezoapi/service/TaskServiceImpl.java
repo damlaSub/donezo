@@ -34,6 +34,7 @@ public class TaskServiceImpl implements TaskService {
         public TaskResponse toggleTask(Long id) {
             Task task = repo.findById(id).orElseThrow();
             task.setCompleted(!task.isCompleted());
+            task.setUpdatedAt(LocalDateTime.now());
              Task saved = repo.save(task);
              return buildTaskResponse(saved);
         }
@@ -42,7 +43,22 @@ public class TaskServiceImpl implements TaskService {
             repo.deleteById(id);
         }
 
-        protected TaskResponse buildTaskResponse(Task task) {
-            return new TaskResponse(task.getId(), task.getName(), task.isCompleted(), task.getCreatedAt());
+    @Override
+    public TaskResponse updateTask(Long id, String name) {
+        Task task = repo.findById(id).orElseThrow();
+        task.setName(name);
+        task.setUpdatedAt(LocalDateTime.now());
+        Task saved = repo.save(task);
+        return buildTaskResponse(saved);
+    }
+
+    @Override
+    public TaskResponse getTaskById(Long id) {
+        Task task = repo.findById(id).orElseThrow();
+        return buildTaskResponse(task);
+    }
+
+    protected TaskResponse buildTaskResponse(Task task) {
+            return new TaskResponse(task.getId(), task.getName(), task.isCompleted(), task.getCreatedAt(), task.getUpdatedAt());
         }
 }

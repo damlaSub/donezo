@@ -19,6 +19,8 @@ public class Task extends BaseEntity{
     private boolean completed = false;
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     public Task(String name){}
 }

@@ -29,5 +29,6 @@
 
     <!-- Include other changes -->
     <include file="db/changelog/changelog-add-created-at.xml"/>
+    <include file="db/changelog/changelog-add-updated-at-to-task.xml"/>
 
 </databaseChangeLog>

@@ -1,6 +1,6 @@
 package com.donezo.donezoapi.controllers;
 
-import com.donezo.donezoapi.dtos.CreateTaskRequest;
+import com.donezo.donezoapi.dtos.CreateUpdateTaskRequest;
 import com.donezo.donezoapi.dtos.TaskResponse;
 import com.donezo.donezoapi.service.TaskService;
 import jakarta.validation.Valid;
@@ -24,10 +24,22 @@ public class TaskController {
         return service.getAllTasks();
     }
 
+    @GetMapping("/{id}")
+    public TaskResponse getTaskForUpdate(@PathVariable Long id) {
+        return service.getTaskById(id);
+    }
+
     @PostMapping
-    public TaskResponse create(@Valid @RequestBody CreateTaskRequest request) {
+    public TaskResponse create(@Valid @RequestBody CreateUpdateTaskRequest request) {
          return service.createTask(request.name());
     }
+
+    @PatchMapping("/{id}")
+    public TaskResponse update(@PathVariable Long id,
+                               @RequestBody CreateUpdateTaskRequest request) {
+        return service.updateTask(id, request.name());
+    }
+
 
     @PatchMapping("/{id}/toggle")
     public TaskResponse toggle(@PathVariable Long id) {

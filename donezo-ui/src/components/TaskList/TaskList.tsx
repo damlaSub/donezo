@@ -7,9 +7,11 @@ interface TaskListProps {
   tasks: Task[];
   onToggle: (id: number) => void;
   onDelete: (id: number) => void;
+  selectedTaskId?: number | null;
+  onSelect?: (id: number) => void;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onToggle, onDelete }) => {
+const TaskList: React.FC<TaskListProps> = ({ tasks, onToggle, onDelete, selectedTaskId, onSelect }) => {
 
   const sortedTasks = [...tasks].sort((a, b) => {
     if (a.completed !== b.completed) {
@@ -30,14 +32,24 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onToggle, onDelete }) => {
           <ListItem
             key={task.id}
             secondaryAction={
-              <IconButton edge="end" aria-label="delete" onClick={() => onDelete(task.id)}>
+              <IconButton edge="end" aria-label="delete" onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}>
                 <DeleteIcon />
               </IconButton>
             }
+            onClick={() => onSelect && onSelect(task.id)}
+            sx={{
+              bgcolor: selectedTaskId === task.id ? 'action.selected' : 'transparent',
+              borderRadius: 1,
+              cursor: onSelect ? 'pointer' : 'default',
+              '&:hover': {
+                bgcolor: 'action.hover',
+              },
+            }}
           >
             <Checkbox
               checked={task.completed}
-              onChange={() => onToggle(task.id)}
+              onChange={(e) => { e.stopPropagation(); onToggle(task.id); }}
+              onClick={(e) => e.stopPropagation()}
               sx={{
                 '&.Mui-checked': {
                   color: 'secondary.main',

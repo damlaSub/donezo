@@ -5,19 +5,25 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 interface AddTaskPageProps {
   onBack: () => void;
   onAdd: (name: string) => Promise<void>;
+  task?: import('../types/Task').Task;
+  onUpdate?: (id: number, name: string) => Promise<void>;
 }
 
-const AddTaskPage: React.FC<AddTaskPageProps> = ({ onBack, onAdd }) => {
-  const [value, setValue] = useState('');
+const AddTaskPage: React.FC<AddTaskPageProps> = ({ onBack, onAdd, task, onUpdate }) => {
+  const [value, setValue] = useState(task?.name || '');
 
   const handleAdd = async () => {
-    if (value.trim()) {
-      try {
-        await onAdd(value.trim());
-        onBack();
-      } catch (error) {
-        console.error('Error adding task:', error);
+    const trimmed = value.trim();
+    if (!trimmed) return;
+    try {
+      if (task && onUpdate) {
+        await onUpdate(task.id, trimmed);
+      } else {
+        await onAdd(trimmed);
       }
+      onBack();
+    } catch (error) {
+      console.error('Error saving task:', error);
     }
   };
 
@@ -38,7 +44,7 @@ const AddTaskPage: React.FC<AddTaskPageProps> = ({ onBack, onAdd }) => {
             <ArrowBackIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 1 }}>
-            New Task
+            {task ? 'Edit Task' : 'New Task'}
           </Typography>
           <Button 
             color="inherit" 

@@ -5,11 +5,12 @@ import AddIcon from '@mui/icons-material/Add';
 import TaskList from './TaskList/TaskList';
 import AddTaskPage from './AddTaskPage';
 import { Task } from '../types/Task';
-import { getAllTasks, createTask, toggleTask, deleteTask } from '../api/tasksApi';
+import { getAllTasks, createTask, toggleTask, deleteTask, updateTaskName } from '../api/tasksApi';
 
 const TasksPage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [showAddTask, setShowAddTask] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Fetch all tasks when component mounts
@@ -68,10 +69,27 @@ const TasksPage: React.FC = () => {
 
   const handleBack = () => {
     setShowAddTask(false);
+    setSelectedTaskId(null);
+  };
+
+  const handleSelectTask = (id: number) => {
+    setSelectedTaskId(id);
+    setShowAddTask(true);
+  };
+
+  const handleUpdateTask = async (id: number, name: string) => {
+    try {
+      const updated = await updateTaskName(id, name);
+      setTasks(prev => prev.map(t => (t.id === id ? updated : t)));
+    } catch (error) {
+      console.error('Failed to update task:', error);
+      throw error;
+    }
   };
 
   if (showAddTask) {
-    return <AddTaskPage onBack={handleBack} onAdd={handleAddTask} />;
+    const selectedTask = tasks.find(t => t.id === selectedTaskId) || undefined;
+    return <AddTaskPage onBack={handleBack} onAdd={handleAddTask} task={selectedTask} onUpdate={handleUpdateTask} />;
   }
 
   // Main tasks page
@@ -84,7 +102,9 @@ const TasksPage: React.FC = () => {
         <TaskList 
           tasks={tasks} 
           onToggle={handleToggleTask} 
-          onDelete={handleDeleteTask} 
+          onDelete={handleDeleteTask}
+          selectedTaskId={selectedTaskId}
+          onSelect={handleSelectTask}
         />
       ) : (
         <Box sx={{ textAlign: 'center', py: 4, color: '#aaa' }}>

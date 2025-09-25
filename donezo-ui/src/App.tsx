@@ -10,26 +10,25 @@ const TABS = [
   { key: 'pomodoro', label: 'Pomodoro', icon: '⏱️' },
 ] as const;
 
-type TabKey = typeof TABS[number]['key'];
+type TabKey = (typeof TABS)[number]['key'];
 
-const PAGES: Record<TabKey, FC<{}>> = {
+const PAGES: Record<TabKey, FC> = {
   notes: NotesPage,
   calendar: CalendarPage,
   pomodoro: PomodoroPage,
 };
 
 const App: React.FC = () => {
-  const [tab, setTab] =  useState<TabKey>('notes');
+  const [tab, setTab] = useState<TabKey>('notes');
   const Page = PAGES[tab];
 
   return (
-    <div  className="app-container">
-      {<Suspense
-        key={tab}
-        fallback={<div style={{ padding: 24 }}>Loading {tab}…</div>}
-      >
-        <Page />
-      </Suspense>}
+    <div className="app-container">
+      {
+        <Suspense key={tab} fallback={<div style={{ padding: 24 }}>Loading {tab}…</div>}>
+          <Page />
+        </Suspense>
+      }
       <nav
         style={{
           position: 'fixed',
@@ -45,15 +44,15 @@ const App: React.FC = () => {
           zIndex: 1001,
         }}
       >
-        {TABS.map(t => (
+        {TABS.map((t) => (
           <button
-          key={t.key}
-          onClick={() => setTab(t.key)}
-          className={`nav-button ${tab === t.key ? 'active' : ''}`}
-          aria-label={t.label}
-        >
-          <span className="nav-icon">{t.icon}</span>
-          <span className="nav-label">{t.label}</span>
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className={`nav-button ${tab === t.key ? 'active' : ''}`}
+            aria-label={t.label}
+          >
+            <span className="nav-icon">{t.icon}</span>
+            <span className="nav-label">{t.label}</span>
           </button>
         ))}
       </nav>

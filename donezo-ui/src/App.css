@@ -40,7 +40,7 @@
 .app-container {
   min-height: 100vh;
   background: #fafafa;
-  padding-bottom: 64px; 
+  padding-bottom: 64px;
 }
 
 .nav-button {
@@ -55,7 +55,7 @@
   height: 100%;
   outline: none;
   cursor: pointer;
-  color: #888; 
+  color: #888;
 }
 
 .nav-button.active {
@@ -79,4 +79,3 @@
   justify-content: center;
   background: #fafafa;
 }
-

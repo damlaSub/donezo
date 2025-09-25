@@ -8,7 +8,7 @@ export const getAllTasks = async (): Promise<Task[]> => {
   return res.data;
 };
 
-export const getTaskById = async (id:number): Promise<Task> => {
+export const getTaskById = async (id: number): Promise<Task> => {
   const res = await axios.get<Task>(`${API_BASE}/tasks/${id}`);
   return res.data;
 };

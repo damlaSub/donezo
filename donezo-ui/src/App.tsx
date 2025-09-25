@@ -1,25 +1,35 @@
-import React, { useState } from 'react';
-import NotesPage from './components/TasksPage';
-import CalendarPage from './components/CalendarPage';
-import PomodoroPage from './components/PomodoroPage';
+import React, { FC, useState, Suspense } from 'react';
+import './App.css';
+const NotesPage = React.lazy(() => import('./components/TasksPage'));
+const CalendarPage = React.lazy(() => import('./components/CalendarPage'));
+const PomodoroPage = React.lazy(() => import('./components/PomodoroPage'));
 
 const TABS = [
   { key: 'notes', label: 'Notes', icon: '📝' },
   { key: 'calendar', label: 'Calendar', icon: '📅' },
   { key: 'pomodoro', label: 'Pomodoro', icon: '⏱️' },
-];
+] as const;
+
+type TabKey = typeof TABS[number]['key'];
+
+const PAGES: Record<TabKey, FC<{}>> = {
+  notes: NotesPage,
+  calendar: CalendarPage,
+  pomodoro: PomodoroPage,
+};
 
 const App: React.FC = () => {
-  const [tab, setTab] = useState('notes');
-
-  let PageComponent;
-  if (tab === 'notes') PageComponent = <NotesPage />;
-  else if (tab === 'calendar') PageComponent = <CalendarPage />;
-  else if (tab === 'pomodoro') PageComponent = <PomodoroPage />;
+  const [tab, setTab] =  useState<TabKey>('notes');
+  const Page = PAGES[tab];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#fafafa', paddingBottom: '64px' }}>
-      {PageComponent}
+    <div  className="app-container">
+      {<Suspense
+        key={tab}
+        fallback={<div style={{ padding: 24 }}>Loading {tab}…</div>}
+      >
+        <Page />
+      </Suspense>}
       <nav
         style={{
           position: 'fixed',
@@ -37,26 +47,13 @@ const App: React.FC = () => {
       >
         {TABS.map(t => (
           <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            style={{
-              flex: 1,
-              background: 'none',
-              border: 'none',
-              color: tab === t.key ? '#1976d2' : '#888',
-              fontSize: '20px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
-              outline: 'none',
-              cursor: 'pointer',
-            }}
-            aria-label={t.label}
-          >
-            <span style={{ fontSize: '24px' }}>{t.icon}</span>
-            <span style={{ fontSize: '12px', marginTop: '2px' }}>{t.label}</span>
+          key={t.key}
+          onClick={() => setTab(t.key)}
+          className={`nav-button ${tab === t.key ? 'active' : ''}`}
+          aria-label={t.label}
+        >
+          <span className="nav-icon">{t.icon}</span>
+          <span className="nav-label">{t.label}</span>
           </button>
         ))}
       </nav>

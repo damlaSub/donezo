@@ -10,10 +10,10 @@ interface AddTaskPageProps {
 }
 
 const AddTaskPage: React.FC<AddTaskPageProps> = ({ onBack, onAdd, task, onUpdate }) => {
-  const [value, setValue] = useState(task?.name || '');
+  const [value, setValue] = useState<string>(task?.name || '');
 
-  const handleAdd = async () => {
-    const trimmed = value.trim();
+  const handleAdd = async (): Promise<void> => {
+    const trimmed: string = value.trim();
     if (!trimmed) return;
     try {
       if (task && onUpdate) {
@@ -22,12 +22,12 @@ const AddTaskPage: React.FC<AddTaskPageProps> = ({ onBack, onAdd, task, onUpdate
         await onAdd(trimmed);
       }
       onBack();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error saving task:', error);
     }
   };
 
-  const handleBack = () => {
+  const handleBack = (): void  => {
     onBack();
   };
 
@@ -60,8 +60,8 @@ const AddTaskPage: React.FC<AddTaskPageProps> = ({ onBack, onAdd, task, onUpdate
         <TextField
           label="Task name"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+          onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => e.key === 'Enter' && handleAdd()}
           fullWidth
           variant="outlined"
           multiline

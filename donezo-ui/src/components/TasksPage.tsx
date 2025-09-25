@@ -9,16 +9,16 @@ import { getAllTasks, createTask, toggleTask, deleteTask, updateTaskName } from 
 
 const TasksPage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [showAddTask, setShowAddTask] = useState(false);
+  const [showAddTask, setShowAddTask] = useState<boolean>(false);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Fetch all tasks when component mounts
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  const fetchTasks = async () => {
+  const fetchTasks = async (): Promise<void> => {
     try {
       setLoading(true);
       const fetchedTasks = await getAllTasks();
@@ -30,7 +30,7 @@ const TasksPage: React.FC = () => {
     }
   };
 
-  const handleAddTask = async (name: string) => {
+  const handleAddTask = async (name: string): Promise<void> => {
     try {
       const newTask = await createTask(name);
            
@@ -47,7 +47,7 @@ const TasksPage: React.FC = () => {
     }
   };
 
-  const handleToggleTask = async (id: number) => {
+  const handleToggleTask = async (id: number): Promise<void> => {
     try {
       const updatedTask = await toggleTask(id);
       setTasks(tasks.map(task =>
@@ -58,7 +58,7 @@ const TasksPage: React.FC = () => {
     }
   };
 
-  const handleDeleteTask = async (id: number) => {
+  const handleDeleteTask = async (id: number): Promise<void> => {
     try {
       await deleteTask(id);
       setTasks(tasks.filter(task => task.id !== id));
@@ -67,17 +67,17 @@ const TasksPage: React.FC = () => {
     }
   };
 
-  const handleBack = () => {
+  const handleBack = (): void => {
     setShowAddTask(false);
     setSelectedTaskId(null);
   };
 
-  const handleSelectTask = (id: number) => {
+  const handleSelectTask = (id: number): void => {
     setSelectedTaskId(id);
     setShowAddTask(true);
   };
 
-  const handleUpdateTask = async (id: number, name: string) => {
+  const handleUpdateTask = async (id: number, name: string): Promise<void> => {
     try {
       const updated = await updateTaskName(id, name);
       setTasks(prev => prev.map(t => (t.id === id ? updated : t)));
@@ -88,7 +88,7 @@ const TasksPage: React.FC = () => {
   };
 
   if (showAddTask) {
-    const selectedTask = tasks.find(t => t.id === selectedTaskId) || undefined;
+    const selectedTask: Task | undefined = tasks.find(t => t.id === selectedTaskId) || undefined;
     return <AddTaskPage onBack={handleBack} onAdd={handleAddTask} task={selectedTask} onUpdate={handleUpdateTask} />;
   }
 

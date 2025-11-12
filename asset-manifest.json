@@ -1,12 +1,25 @@
 {
   "files": {
-    "main.js": "/donezo/static/js/main.626dfa49.js",
+    "main.css": "/donezo/static/css/main.e78f3bca.css",
+    "main.js": "/donezo/static/js/main.6dcd714a.js",
+    "static/js/687.cdb3321d.chunk.js": "/donezo/static/js/687.cdb3321d.chunk.js",
+    "static/js/442.d7056f5a.chunk.js": "/donezo/static/js/442.d7056f5a.chunk.js",
+    "static/js/750.997848c3.chunk.js": "/donezo/static/js/750.997848c3.chunk.js",
+    "static/js/669.072fe18f.chunk.js": "/donezo/static/js/669.072fe18f.chunk.js",
+    "static/js/38.994ef8b2.chunk.js": "/donezo/static/js/38.994ef8b2.chunk.js",
     "static/media/buttonSound.mp3": "/donezo/static/media/buttonSound.deb07705bcc3cf1714a6.mp3",
     "static/media/alarm.mp3": "/donezo/static/media/alarm.ff940147a3d8f19a7eb5.mp3",
     "index.html": "/donezo/index.html",
-    "main.626dfa49.js.map": "/donezo/static/js/main.626dfa49.js.map"
+    "main.e78f3bca.css.map": "/donezo/static/css/main.e78f3bca.css.map",
+    "main.6dcd714a.js.map": "/donezo/static/js/main.6dcd714a.js.map",
+    "687.cdb3321d.chunk.js.map": "/donezo/static/js/687.cdb3321d.chunk.js.map",
+    "442.d7056f5a.chunk.js.map": "/donezo/static/js/442.d7056f5a.chunk.js.map",
+    "750.997848c3.chunk.js.map": "/donezo/static/js/750.997848c3.chunk.js.map",
+    "669.072fe18f.chunk.js.map": "/donezo/static/js/669.072fe18f.chunk.js.map",
+    "38.994ef8b2.chunk.js.map": "/donezo/static/js/38.994ef8b2.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.626dfa49.js"
+    "static/css/main.e78f3bca.css",
+    "static/js/main.6dcd714a.js"
   ]
 }

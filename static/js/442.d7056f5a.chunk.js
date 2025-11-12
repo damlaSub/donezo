@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkdonezo_ui=self.webpackChunkdonezo_ui||[]).push([[442],{6442:(e,n,a)=>{a.r(n),a.d(n,{default:()=>d});a(5043);var i=a(579);const d=()=>(0,i.jsx)("div",{style:{padding:"16px",minHeight:"100vh",background:"var(--mui-palette-background-default)"},children:(0,i.jsx)("div",{style:{color:"#aaa",textAlign:"center",marginTop:"40px"},children:"Calendar view coming soon."})})}}]);
+//# sourceMappingURL=442.d7056f5a.chunk.js.map

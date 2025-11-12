@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { Task } from '../types/Task';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+const API_BASE: string = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 export const getAllTasks = async (): Promise<Task[]> => {
   const res = await axios.get<Task[]>(`${API_BASE}/tasks`);
   return res.data;
 };
 
-export const getTaskById = async (id:number): Promise<Task> => {
+export const getTaskById = async (id: number): Promise<Task> => {
   const res = await axios.get<Task>(`${API_BASE}/tasks/${id}`);
   return res.data;
 };

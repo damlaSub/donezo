@@ -11,28 +11,39 @@ interface TaskListProps {
   onSelect?: (id: number) => void;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onToggle, onDelete, selectedTaskId, onSelect }) => {
-
+const TaskList: React.FC<TaskListProps> = ({
+  tasks,
+  onToggle,
+  onDelete,
+  selectedTaskId,
+  onSelect,
+}) => {
   const sortedTasks = [...tasks].sort((a, b) => {
     if (a.completed !== b.completed) {
       return a.completed ? 1 : -1;
     }
-    
+
     const dateA = new Date(a.createdAt);
     const dateB = new Date(b.createdAt);
     return dateB.getTime() - dateA.getTime();
   });
 
-
   return (
     <List>
-      {sortedTasks.map(task => {
+      {sortedTasks.map((task) => {
         console.log('Rendering task:', task);
         return (
           <ListItem
             key={task.id}
             secondaryAction={
-              <IconButton edge="end" aria-label="delete" onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}>
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(task.id);
+                }}
+              >
                 <DeleteIcon />
               </IconButton>
             }
@@ -48,7 +59,10 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onToggle, onDelete, selected
           >
             <Checkbox
               checked={task.completed}
-              onChange={(e) => { e.stopPropagation(); onToggle(task.id); }}
+              onChange={(e) => {
+                e.stopPropagation();
+                onToggle(task.id);
+              }}
               onClick={(e) => e.stopPropagation()}
               sx={{
                 '&.Mui-checked': {
@@ -61,12 +75,12 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onToggle, onDelete, selected
             />
             <ListItemText
               primary={task.name.trim()}
-              style={{ 
+              style={{
                 textDecoration: task.completed ? 'line-through' : 'none',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
-                maxWidth: 'calc(100vw - 200px)'
+                maxWidth: 'calc(100vw - 200px)',
               }}
             />
           </ListItem>

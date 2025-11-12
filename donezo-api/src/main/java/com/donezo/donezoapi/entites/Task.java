@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "tasks")
+@Table(name = "tasks", schema = "donezo_schema")
 public class Task extends BaseEntity{
     private String name;
     private boolean completed = false;

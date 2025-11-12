@@ -27,9 +27,10 @@ const Timer: React.FC<TimerProps> = ({ mode }) => {
 
   const [seconds, setSeconds] = useState(getInitialTime());
   const [running, setRunning] = useState(false);
+  type AudioHandle = HTMLAudioElement | AudioBufferSourceNode;
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const buttonAudioRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef = useRef<AudioHandle | null>(null);
+  const buttonAudioRef = useRef<AudioHandle | null>(null);
 
   React.useEffect(() => {
     setSeconds(getInitialTime());
@@ -39,48 +40,62 @@ const Timer: React.FC<TimerProps> = ({ mode }) => {
 
   const stopAllAudio = () => {
     if (audioRef.current) {
-      if (audioRef.current.pause) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+      const handle = audioRef.current;
+      if (handle instanceof HTMLAudioElement) {
+        handle.pause();
+        handle.currentTime = 0;
       } else {
-        // Handle AudioBufferSourceNode
-        (audioRef.current as any).stop();
+        handle.stop();
       }
     }
     if (buttonAudioRef.current) {
-      if (buttonAudioRef.current.pause) {
-        buttonAudioRef.current.pause();
-        buttonAudioRef.current.currentTime = 0;
+      const handle = buttonAudioRef.current;
+      if (handle instanceof HTMLAudioElement) {
+        handle.pause();
+        handle.currentTime = 0;
       } else {
-        // Handle AudioBufferSourceNode
-        (buttonAudioRef.current as any).stop();
+        handle.stop();
       }
     }
   };
 
   const playAlarmSound = () => {
     stopAllAudio();
-    audioRef.current = new Audio(alarmSound);
-    audioRef.current.play().catch(() => {});
+    const audio = new Audio(alarmSound);
+    audioRef.current = audio;
+    audio.play().catch((err) => {
+      console.error('Error playing alarm sound:', err);
+    });
   };
 
   const playButtonSound = () => {
     stopAllAudio();
-    
-    //  trim the audio context 
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    
+
+    //  trim the audio context
+    const getAudioContextCtor = (): typeof AudioContext => {
+      if ('AudioContext' in window && typeof window.AudioContext !== 'undefined') {
+        return window.AudioContext;
+      }
+      const w = window as unknown as { webkitAudioContext?: typeof AudioContext };
+      if (w.webkitAudioContext) {
+        return w.webkitAudioContext;
+      }
+      throw new Error('AudioContext not supported in this browser');
+    };
+    const AudioContextCtor = getAudioContextCtor();
+    const audioContext = new AudioContextCtor();
+
     fetch(buttonSound)
-      .then(response => response.arrayBuffer())
-      .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-      .then(audioBuffer => {
+      .then((response) => response.arrayBuffer())
+      .then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer))
+      .then((audioBuffer) => {
         const trimmedLength = Math.min(1 * audioContext.sampleRate, audioBuffer.length);
         const trimmedBuffer = audioContext.createBuffer(
           audioBuffer.numberOfChannels,
           trimmedLength,
           audioContext.sampleRate
         );
-        
+
         for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
           const channelData = audioBuffer.getChannelData(channel);
           const trimmedData = trimmedBuffer.getChannelData(channel);
@@ -88,19 +103,20 @@ const Timer: React.FC<TimerProps> = ({ mode }) => {
             trimmedData[i] = channelData[i];
           }
         }
-        
+
         const source = audioContext.createBufferSource();
         source.buffer = trimmedBuffer;
         source.connect(audioContext.destination);
         source.start();
-        
-        buttonAudioRef.current = source as any;
+
+        buttonAudioRef.current = source;
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error playing button sound:', error);
         // fallback to regular audio if trimming fails
-        buttonAudioRef.current = new Audio(buttonSound);
-        (buttonAudioRef.current as HTMLAudioElement).play().catch(() => {});
+        const audio = new Audio(buttonSound);
+        buttonAudioRef.current = audio;
+        audio.play().catch((err) => console.error('Error playing fallback button sound:', err));
       });
   };
 
@@ -109,9 +125,11 @@ const Timer: React.FC<TimerProps> = ({ mode }) => {
       playButtonSound();
       setRunning(true);
       intervalRef.current = setInterval(() => {
-        setSeconds(prev => {
+        setSeconds((prev) => {
           if (prev <= 1) {
-            clearInterval(intervalRef.current!);
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+            }
             setRunning(false);
             playAlarmSound();
             return getInitialTime();
@@ -139,11 +157,19 @@ const Timer: React.FC<TimerProps> = ({ mode }) => {
 
   return (
     <Paper sx={{ p: 3, mt: 3, textAlign: 'center', backgroundColor: 'background.paper' }}>
-      <Typography variant="h2" color="textPrimary">{minutes}:{secs}</Typography>
+      <Typography variant="h2" color="textPrimary">
+        {minutes}:{secs}
+      </Typography>
       <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 2 }}>
-        <Button variant="contained" color={getButtonColor()} onClick={start} disabled={running}>Start</Button>
-        <Button variant="outlined" color={getButtonColor()} onClick={pause} disabled={!running}>Pause</Button>
-        <Button variant="outlined" color={getButtonColor()} onClick={reset}>Reset</Button>
+        <Button variant="contained" color={getButtonColor()} onClick={start} disabled={running}>
+          Start
+        </Button>
+        <Button variant="outlined" color={getButtonColor()} onClick={pause} disabled={!running}>
+          Pause
+        </Button>
+        <Button variant="outlined" color={getButtonColor()} onClick={reset}>
+          Reset
+        </Button>
       </Stack>
     </Paper>
   );

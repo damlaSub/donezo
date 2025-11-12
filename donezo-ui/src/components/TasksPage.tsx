@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
@@ -9,16 +10,16 @@ import { getAllTasks, createTask, toggleTask, deleteTask, updateTaskName } from 
 
 const TasksPage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [showAddTask, setShowAddTask] = useState(false);
+  const [showAddTask, setShowAddTask] = useState<boolean>(false);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Fetch all tasks when component mounts
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  const fetchTasks = async () => {
+  const fetchTasks = async (): Promise<void> => {
     try {
       setLoading(true);
       const fetchedTasks = await getAllTasks();
@@ -30,57 +31,61 @@ const TasksPage: React.FC = () => {
     }
   };
 
-  const handleAddTask = async (name: string) => {
+  const handleAddTask = async (name: string): Promise<void> => {
     try {
       const newTask = await createTask(name);
-           
+
       // Add the new task to local state
-      setTasks(prevTasks => {
+      setTasks((prevTasks) => {
         const updatedTasks = [...prevTasks, newTask];
         return updatedTasks;
       });
-      
+
       setShowAddTask(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to create task:', error);
-      alert(`Failed to create task: ${error.response?.data?.message || error.message}`);
+      if (axios.isAxiosError(error)) {
+        alert(`Failed to create task: ${error.response?.data?.message ?? error.message}`);
+      } else if (error instanceof Error) {
+        alert(`Failed to create task: ${error.message}`);
+      } else {
+        alert('Failed to create task: Unknown error');
+      }
     }
   };
 
-  const handleToggleTask = async (id: number) => {
+  const handleToggleTask = async (id: number): Promise<void> => {
     try {
       const updatedTask = await toggleTask(id);
-      setTasks(tasks.map(task =>
-        task.id === id ? updatedTask : task
-      ));
+      setTasks(tasks.map((task) => (task.id === id ? updatedTask : task)));
     } catch (error) {
       console.error('Error toggling task:', error);
     }
   };
 
-  const handleDeleteTask = async (id: number) => {
+  const handleDeleteTask = async (id: number): Promise<void> => {
     try {
       await deleteTask(id);
-      setTasks(tasks.filter(task => task.id !== id));
+      setTasks(tasks.filter((task) => task.id !== id));
     } catch (error) {
       console.error('Error deleting task:', error);
     }
   };
 
-  const handleBack = () => {
+  const handleBack = (): void => {
     setShowAddTask(false);
     setSelectedTaskId(null);
   };
 
-  const handleSelectTask = (id: number) => {
+  const handleSelectTask = (id: number): void => {
     setSelectedTaskId(id);
     setShowAddTask(true);
   };
 
-  const handleUpdateTask = async (id: number, name: string) => {
+  const handleUpdateTask = async (id: number, name: string): Promise<void> => {
     try {
       const updated = await updateTaskName(id, name);
-      setTasks(prev => prev.map(t => (t.id === id ? updated : t)));
+      setTasks((prev) => prev.map((t) => (t.id === id ? updated : t)));
     } catch (error) {
       console.error('Failed to update task:', error);
       throw error;
@@ -88,20 +93,26 @@ const TasksPage: React.FC = () => {
   };
 
   if (showAddTask) {
-    const selectedTask = tasks.find(t => t.id === selectedTaskId) || undefined;
-    return <AddTaskPage onBack={handleBack} onAdd={handleAddTask} task={selectedTask} onUpdate={handleUpdateTask} />;
+    const selectedTask: Task | undefined = tasks.find((t) => t.id === selectedTaskId) || undefined;
+    return (
+      <AddTaskPage
+        onBack={handleBack}
+        onAdd={handleAddTask}
+        task={selectedTask}
+        onUpdate={handleUpdateTask}
+      />
+    );
   }
 
   // Main tasks page
   return (
     <Box sx={{ p: 2, pb: 8, minHeight: '100vh', bgcolor: 'background.default' }}>
-      
       {loading ? (
         <Box sx={{ textAlign: 'center', py: 4 }}>Loading tasks...</Box>
       ) : tasks.length > 0 ? (
-        <TaskList 
-          tasks={tasks} 
-          onToggle={handleToggleTask} 
+        <TaskList
+          tasks={tasks}
+          onToggle={handleToggleTask}
           onDelete={handleDeleteTask}
           selectedTaskId={selectedTaskId}
           onSelect={handleSelectTask}
@@ -111,7 +122,7 @@ const TasksPage: React.FC = () => {
           No tasks yet. Click the + button to add your first task!
         </Box>
       )}
-      
+
       <Fab
         color="secondary"
         aria-label="Add task"
@@ -129,4 +140,4 @@ const TasksPage: React.FC = () => {
   );
 };
 
-export default TasksPage; 
+export default TasksPage;

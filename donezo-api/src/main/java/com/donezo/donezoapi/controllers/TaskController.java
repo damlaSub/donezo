@@ -36,6 +36,7 @@ public class TaskController {
 
     @PatchMapping("/{id}")
     public TaskResponse update(@PathVariable Long id,
+                               @Valid
                                @RequestBody CreateUpdateTaskRequest request) {
         return service.updateTask(id, request.name());
     }

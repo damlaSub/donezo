@@ -14,29 +14,32 @@ const PomodoroPage: React.FC = () => {
   const modeConfig = [
     { key: 'pomodoro', label: 'Pomodoro' },
     { key: 'shortBreak', label: 'Short Break' },
-    { key: 'longBreak', label: 'Long Break' }
+    { key: 'longBreak', label: 'Long Break' },
   ] as const;
 
-  const renderButton = (modeKey: typeof modeConfig[number]['key'], label: string) => {
+  const renderButton = (modeKey: (typeof modeConfig)[number]['key'], label: string) => {
     const isActive = activeMode === modeKey;
     const color = getButtonColor(activeMode);
-    
+
     return (
-      <Button 
+      <Button
         key={modeKey}
         variant={isActive ? 'contained' : 'outlined'}
         color={color}
         onClick={() => setActiveMode(modeKey)}
         sx={{
-          ...(isActive ? {} : {
-            borderColor: color === 'error' ? '#f44336' : '#2196f3',
-            color: color === 'error' ? '#f44336' : '#2196f3',
-            '&:hover': {
-              borderColor: color === 'error' ? '#d32f2f' : '#1976d2',
-              color: color === 'error' ? '#d32f2f' : '#1976d2',
-              bgcolor: color === 'error' ? 'rgba(244, 67, 54, 0.04)' : 'rgba(33, 150, 243, 0.04)'
-            }
-          })
+          ...(isActive
+            ? {}
+            : {
+                borderColor: color === 'error' ? '#f44336' : '#2196f3',
+                color: color === 'error' ? '#f44336' : '#2196f3',
+                '&:hover': {
+                  borderColor: color === 'error' ? '#d32f2f' : '#1976d2',
+                  color: color === 'error' ? '#d32f2f' : '#1976d2',
+                  bgcolor:
+                    color === 'error' ? 'rgba(244, 67, 54, 0.04)' : 'rgba(33, 150, 243, 0.04)',
+                },
+              }),
         }}
       >
         {label}

@@ -1,8 +1,7 @@
 package com.donezo.donezoapi.service;
 
+import com.donezo.donezoapi.dtos.CreateUpdateTaskRequest;
 import com.donezo.donezoapi.dtos.TaskResponse;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -11,13 +10,13 @@ public interface TaskService {
 
     List<TaskResponse> getAllTasks();
 
-    TaskResponse createTask(String name);
+    TaskResponse createTask(CreateUpdateTaskRequest request);
 
-    TaskResponse toggleTask(Long id);
+    TaskResponse togglePin(Long id);
 
     void deleteTask(Long id);
 
-    TaskResponse updateTask(Long id, String name);
+    TaskResponse updateTask(Long id, CreateUpdateTaskRequest request);
 
     TaskResponse getTaskById(Long id);
 }

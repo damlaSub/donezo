@@ -31,20 +31,20 @@ public class TaskController {
 
     @PostMapping
     public TaskResponse create(@Valid @RequestBody CreateUpdateTaskRequest request) {
-         return service.createTask(request.name());
+         return service.createTask(request);
     }
 
     @PatchMapping("/{id}")
     public TaskResponse update(@PathVariable Long id,
                                @Valid
                                @RequestBody CreateUpdateTaskRequest request) {
-        return service.updateTask(id, request.name());
+        return service.updateTask(id, request);
     }
 
 
     @PatchMapping("/{id}/toggle")
     public TaskResponse toggle(@PathVariable Long id) {
-         return service.toggleTask(id);
+         return service.togglePin(id);
     }
 
     @DeleteMapping("/{id}")

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, TextField, Button } from '@mui/material';
 
 interface TaskInputProps {
-  onAdd: (name: string) => void;
+  onAdd: (description: string) => void;
 }
 
 const TaskInput: React.FC<TaskInputProps> = ({ onAdd }) => {

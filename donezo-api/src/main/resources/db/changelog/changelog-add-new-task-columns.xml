@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="003-add-task-extra-columns" author="damlaSub">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="tasks" columnName="pinned"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="tasks">
+
+            <column name="pinned" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="reminder_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="title" type="varchar(200)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="image_url" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

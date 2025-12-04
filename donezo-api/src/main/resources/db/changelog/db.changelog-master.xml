@@ -30,5 +30,7 @@
     <!-- Include other changes -->
     <include file="db/changelog/changelog-add-created-at.xml"/>
     <include file="db/changelog/changelog-add-updated-at-to-task.xml"/>
+    <include file="db/changelog/changelog-add-new-task-columns.xml"/>
+    <include file="db/changelog/changelog-rename-name-to-description.xml"/>
 
 </databaseChangeLog>

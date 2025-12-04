@@ -1,92 +1,97 @@
+// import React from 'react';
+// import { Box } from '@mui/material';
+// import { Task } from '../../types/Task';
+// import TaskListItem from './TaskListItem';
+
+// type Props = {
+//   tasks: Task[];
+//   onTogglePin: (id: number) => Promise<void> | void;
+//   onDelete: (id: number) => Promise<void> | void;
+//   onOpenTask?: (task: Task) => void;
+// };
+
+// const TaskList: React.FC<Props> = ({ tasks, onTogglePin, onDelete, onOpenTask }) => {
+//   const sortedTasks = [...tasks].sort((a, b) => {
+//     if (a.pinned && !b.pinned) return -1;
+//     if (!a.pinned && b.pinned) return 1;
+
+//     const createdA = new Date(a.createdAt).getTime();
+//     const createdB = new Date(b.createdAt).getTime();
+//     return createdB - createdA;
+//   });
+
+//   const cardColors = ['#F3E5F5', '#E3F2FD', '#E8F5E9', '#FFF3E0', '#FBE9E7', '#E0F7FA'];
+
+//   return (
+//     <Box
+//       sx={{
+//         display: 'grid',
+//         gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 320px))',
+//         gap: 2,
+//       }}
+//     >
+//       {sortedTasks.map((task, index) => (
+//         <TaskListItem
+//           key={task.id}
+//           task={task}
+//           cardColor={cardColors[index % cardColors.length]}
+//           onTogglePin={onTogglePin}
+//           onDelete={onDelete}
+//           onOpenTask={onOpenTask}
+//         />
+//       ))}
+//     </Box>
+//   );
+// };
+
+// export default TaskList;
 import React from 'react';
-import { List, ListItem, ListItemText, Checkbox, IconButton } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Box } from '@mui/material';
 import { Task } from '../../types/Task';
+import TaskListItem from './TaskListItem';
 
-interface TaskListProps {
+type Props = {
   tasks: Task[];
-  onToggle: (id: number) => void;
-  onDelete: (id: number) => void;
-  selectedTaskId?: number | null;
-  onSelect?: (id: number) => void;
-}
+  onTogglePin: (id: number) => Promise<void> | void;
+  onDelete: (id: number) => Promise<void> | void;
+  onOpenTask?: (task: Task, opts?: { action?: 'reminder' | 'image'; anchor?: HTMLElement | null }) => void;
+  onRemind?: (task: Task) => void;
+  onAddImage?: (task: Task) => void;
+};
 
-const TaskList: React.FC<TaskListProps> = ({
-  tasks,
-  onToggle,
-  onDelete,
-  selectedTaskId,
-  onSelect,
-}) => {
+const TaskList: React.FC<Props> = ({ tasks, onTogglePin, onDelete, onOpenTask, onRemind, onAddImage }) => {
   const sortedTasks = [...tasks].sort((a, b) => {
-    if (a.completed !== b.completed) {
-      return a.completed ? 1 : -1;
-    }
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
 
-    const dateA = new Date(a.createdAt);
-    const dateB = new Date(b.createdAt);
-    return dateB.getTime() - dateA.getTime();
+    const createdA = new Date(a.createdAt).getTime();
+    const createdB = new Date(b.createdAt).getTime();
+    return createdB - createdA;
   });
 
+  const cardColors = ['#F3E5F5', '#E3F2FD', '#E8F5E9', '#FFF3E0', '#FBE9E7', '#E0F7FA'];
+
   return (
-    <List>
-      {sortedTasks.map((task) => {
-        console.log('Rendering task:', task);
-        return (
-          <ListItem
-            key={task.id}
-            secondaryAction={
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete(task.id);
-                }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            }
-            onClick={() => onSelect && onSelect(task.id)}
-            sx={{
-              bgcolor: selectedTaskId === task.id ? 'action.selected' : 'transparent',
-              borderRadius: 1,
-              cursor: onSelect ? 'pointer' : 'default',
-              '&:hover': {
-                bgcolor: 'action.hover',
-              },
-            }}
-          >
-            <Checkbox
-              checked={task.completed}
-              onChange={(e) => {
-                e.stopPropagation();
-                onToggle(task.id);
-              }}
-              onClick={(e) => e.stopPropagation()}
-              sx={{
-                '&.Mui-checked': {
-                  color: 'secondary.main',
-                  '& .MuiSvgIcon-root': {
-                    color: 'white',
-                  },
-                },
-              }}
-            />
-            <ListItemText
-              primary={task.name.trim()}
-              style={{
-                textDecoration: task.completed ? 'line-through' : 'none',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                maxWidth: 'calc(100vw - 200px)',
-              }}
-            />
-          </ListItem>
-        );
-      })}
-    </List>
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 320px))',
+        gap: 2,
+      }}
+    >
+      {sortedTasks.map((task, index) => (
+        <TaskListItem
+          key={task.id}
+          task={task}
+          cardColor={cardColors[index % cardColors.length]}
+          onTogglePin={onTogglePin}
+          onDelete={onDelete}
+          onOpenTask={(t) => onOpenTask && onOpenTask(t)}
+          onRemind={onRemind}
+          onAddImage={onAddImage}
+        />
+      ))}
+    </Box>
   );
 };
 

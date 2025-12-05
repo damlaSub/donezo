@@ -55,14 +55,15 @@ const TaskListItem: React.FC<Props> = ({
         borderColor: isPinned ? 'secondary.main' : 'transparent',
         boxShadow: isPinned ? '0 10px 25px rgba(0,0,0,0.18)' : '0 6px 15px rgba(0,0,0,0.08)',
         transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-        minHeight: 140,
+        // Keep consistent min height for notes without images
+        minHeight: task.imageUrl ? 'auto' : 140,
         cursor: onOpenTask ? 'pointer' : 'default',
         '&:hover': {
           transform: 'translateY(-3px)',
           boxShadow: '0 12px 20px rgba(0,0,0,0.16)',
         },
-        display: 'flex',
-        flexDirection: 'column',
+        display: 'block',
+        width: '100%',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -74,7 +75,6 @@ const TaskListItem: React.FC<Props> = ({
         sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, position: 'relative' }}
         onClick={() => onOpenTask && onOpenTask(task)}
       >
-        {/* Top row: title on the left, pin button on the right */}
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
           <Typography
             variant="subtitle2"
@@ -147,7 +147,6 @@ const TaskListItem: React.FC<Props> = ({
           </Box>
         )}
 
-        {/* Action buttons (reminder, image, delete) - revealed on hover/focus */}
         <Stack direction="row" justifyContent="flex-start" alignItems="center">
           <Stack
             direction="row"
@@ -167,7 +166,6 @@ const TaskListItem: React.FC<Props> = ({
               size="small"
               onClick={(e) => {
                 e.stopPropagation();
-                // call onRemind if provided; otherwise fall back to opening editor
                 if (onRemind) {
                   onRemind(task);
                 } else {

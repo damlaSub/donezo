@@ -59,7 +59,6 @@ const TaskList: React.FC<Props> = ({
       msnryRef.current && msnryRef.current.destroy();
       msnryRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // relayout whenever tasks change

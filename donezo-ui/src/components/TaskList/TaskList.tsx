@@ -54,12 +54,22 @@ type Props = {
   tasks: Task[];
   onTogglePin: (id: number) => Promise<void> | void;
   onDelete: (id: number) => Promise<void> | void;
-  onOpenTask?: (task: Task, opts?: { action?: 'reminder' | 'image'; anchor?: HTMLElement | null }) => void;
+  onOpenTask?: (
+    task: Task,
+    opts?: { action?: 'reminder' | 'image'; anchor?: HTMLElement | null },
+  ) => void;
   onRemind?: (task: Task) => void;
   onAddImage?: (task: Task) => void;
 };
 
-const TaskList: React.FC<Props> = ({ tasks, onTogglePin, onDelete, onOpenTask, onRemind, onAddImage }) => {
+const TaskList: React.FC<Props> = ({
+  tasks,
+  onTogglePin,
+  onDelete,
+  onOpenTask,
+  onRemind,
+  onAddImage,
+}) => {
   const sortedTasks = [...tasks].sort((a, b) => {
     if (a.pinned && !b.pinned) return -1;
     if (!a.pinned && b.pinned) return 1;

@@ -41,10 +41,7 @@ export const createTask = async (payload: CreateUpdateTaskPayload): Promise<Task
   return res.data;
 };
 
-export const updateTask = async (
-  id: number,
-  payload: CreateUpdateTaskPayload,
-): Promise<Task> => {
+export const updateTask = async (id: number, payload: CreateUpdateTaskPayload): Promise<Task> => {
   const res = await apiClient.patch<Task>(`/tasks/${id}`, buildTaskPayload(payload));
   return res.data;
 };

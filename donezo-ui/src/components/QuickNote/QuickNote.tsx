@@ -100,4 +100,4 @@ const QuickNote: React.FC<Props> = ({ onAdd, placeholder = 'Take a note...' }) =
 };
 
 export default QuickNote;
-export { };
+export {};

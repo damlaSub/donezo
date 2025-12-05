@@ -93,7 +93,7 @@ const Timer: React.FC<TimerProps> = ({ mode }) => {
         const trimmedBuffer = audioContext.createBuffer(
           audioBuffer.numberOfChannels,
           trimmedLength,
-          audioContext.sampleRate
+          audioContext.sampleRate,
         );
 
         for (let channel = 0; channel < audioBuffer.numberOfChannels; channel++) {
